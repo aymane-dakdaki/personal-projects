@@ -1,0 +1,116 @@
+# 🧰 MoulScript
+
+**A comprehensive PowerShell toolkit for automating key Windows administrative tasks — proudly crafted with a Moroccan touch.**
+
+---
+
+## 📋 Synopsis
+
+`MoulScript` is an all-in-one PowerShell script designed to streamline and automate repetitive Windows administrative duties. It offers modular functionality for user management, system updates, event monitoring, and data backup/restoration.
+
+> **Note:** Most features require **administrative privileges**.
+
+---
+
+## ⚙️ Supported Tasks
+
+### 🧑‍💼 User Account Management
+- Create and manage local users
+- Set or reset passwords (secure input)
+- Add/remove users from groups
+- Enable, disable, or delete accounts
+- Retrieve detailed user information
+
+### 🛠️ System Updates & Patch Management
+- Check for available Windows updates
+- Install updates (requires `PSWindowsUpdate` module)
+
+### 🧯 Event Log Monitoring & Alerting
+- Monitor specific logs (e.g., System, Application)
+- Filter by event ID, level, or source
+- Continuous monitoring with logging and alerting
+
+### 💾 Backup & Restore
+- Backup files/folders to compressed ZIPs
+- Restore from backups
+- List available backup snapshots
+
+---
+
+## 🚀 Parameters Overview
+
+### General
+- `-Task`: Specifies the administrative task.  
+  Valid options: `UserManagement`, `SystemUpdates`, `EventMonitoring`, `BackupData`, `RestoreData`
+
+---
+
+### 👤 UserManagement Parameters
+| Parameter        | Description |
+|------------------|-------------|
+| `-UserAction`         | Action to perform: `CreateUser`, `SetPassword`, `AddToGroup`, `RemoveFromGroup`, `DisableUser`, `EnableUser`, `RemoveUser`, `GetUserInfo` |
+| `-UserName`           | Username of the account to manage |
+| `-Password`           | (Optional) Secure password prompt if not provided |
+| `-FullName`           | (CreateUser) Full display name |
+| `-UserDescription`    | (CreateUser) Description for the account |
+| `-GroupName`          | (Add/Remove group) Target local group name |
+
+---
+
+### 🔄 SystemUpdates Parameters
+| Parameter        | Description |
+|------------------|-------------|
+| `-UpdateAction`       | Action: `CheckUpdates`, `InstallUpdates` |
+
+---
+
+### 🧾 EventMonitoring Parameters
+| Parameter        | Description |
+|------------------|-------------|
+| `-LogName`             | Log to monitor (`System`, `Application`, etc.) — default: `System` |
+| `-EventID`             | (Optional) Comma-separated event IDs to filter |
+| `-EventLevel`          | (Optional) Levels: `1=Critical`, `2=Error`, `3=Warning`, `4=Info` |
+| `-EventSource`         | (Optional) Filter by specific source |
+| `-AlertLogPath`        | Output log file path — default: `C:\Temp\EventAlerts.log` |
+| `-MaxLogEvents`        | Number of recent events per iteration — default: `20` |
+| `-ContinuousMonitoring`| Enables looped monitoring |
+| `-IntervalSeconds`     | Wait time between iterations — default: `60` |
+
+---
+
+### 📦 BackupData Parameters
+| Parameter        | Description |
+|------------------|-------------|
+| `-SourcePaths`          | Array of paths to back up |
+| `-BackupDestinationPath`| Where ZIP backups are saved |
+| `-BackupNamePrefix`     | File name prefix — default: `Backup` |
+
+---
+
+### ♻️ RestoreData Parameters
+| Parameter        | Description |
+|------------------|-------------|
+| `-RestoreAction`        | `ListBackups`, `RestoreBackup` |
+| `-BackupFolderPath`     | Folder with backup ZIPs |
+| `-BackupFileFullName`   | File name to restore (optional) |
+| `-RestoreDestinationPath`| Output path for restored files |
+
+---
+
+## 📌 Usage Examples
+
+```powershell
+# Create a user
+.\MoulScript.ps1 -Task UserManagement -UserAction CreateUser -UserName "testuser" -FullName "Test User"
+
+# Check for updates
+.\MoulScript.ps1 -Task SystemUpdates -UpdateAction CheckUpdates
+
+# Monitor System log for errors continuously
+.\MoulScript.ps1 -Task EventMonitoring -LogName System -EventLevel 2 -ContinuousMonitoring
+
+# Backup Documents
+.\MoulScript.ps1 -Task BackupData -SourcePaths "C:\Users\$env:USERNAME\Documents" -BackupDestinationPath "D:\Backups" -BackupNamePrefix "DocsBackup"
+
+# List available backups
+.\MoulScript.ps1 -Task RestoreData -RestoreAction ListBackups -BackupFolderPath "D:\Backups"
